@@ -1,5 +1,7 @@
-# Колоди Аркхема
+# Колоди Аркхема / Arkham Decks
 
-32 стартові колоди для карткової гри «Ужас Аркхэма» з наявної колекції: превʼю карт, посилання на ArkhamDB, прокачка за досвід, перевірка пар для гри в дві руки.
+65 стартових колод для «Ужаса Аркхэма: Карточная игра» (Arkham Horror: The Card Game): вибір коробок з автозаміною карт, кампанії з досвідом і травмами, скани карт з ArkhamDB, перевірка пар для гри в дві руки. Українською та англійською.
 
-Сайт: https://iman-vov.github.io/arkham-decks/
+65 starter decks for Arkham Horror: The Card Game: pick your boxes and missing cards are swapped automatically, campaign tracker, card scans from ArkhamDB, two-handed pair check. Ukrainian and English.
+
+Сайт / Site: https://iman-vov.github.io/arkham-decks/
