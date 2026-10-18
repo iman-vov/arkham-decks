@@ -285,7 +285,7 @@ ul.more{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
 .memo .ic{vertical-align:middle}
 
 /* official icon font (ArkhamDB), loaded from its source; falls back to letters */
-@font-face{font-family:'ahicons';src:url('https://cdn.jsdelivr.net/gh/Kamalisk/arkhamdb@1bcc9e6ffdf2deddb9075d38d09f58bc7ca6e287/src/AppBundle/Resources/public/fonts/arkham-icons.woff') format('woff'),url('https://arkhamdb.com/bundles/app/fonts/arkham-icons.woff') format('woff');font-display:swap}
+@font-face{font-family:'ahicons';src:url('https://rawcdn.githack.com/Kamalisk/arkhamdb/1bcc9e6ffdf2deddb9075d38d09f58bc7ca6e287/src/AppBundle/Resources/public/fonts/arkham-icons.woff') format('woff'),url('https://rawcdn.githack.com/Kamalisk/arkhamdb/1bcc9e6ffdf2deddb9075d38d09f58bc7ca6e287/src/AppBundle/Resources/public/fonts/arkham-icons.ttf') format('truetype'),url('https://raw.githubusercontent.com/Kamalisk/arkhamdb/1bcc9e6ffdf2deddb9075d38d09f58bc7ca6e287/src/AppBundle/Resources/public/fonts/arkham-icons.woff') format('woff'),url('https://cdn.jsdelivr.net/gh/Kamalisk/arkhamdb@1bcc9e6ffdf2deddb9075d38d09f58bc7ca6e287/src/AppBundle/Resources/public/fonts/arkham-icons.woff') format('woff'),url('https://arkhamdb.com/bundles/app/fonts/arkham-icons.woff') format('woff');font-display:swap}
 .ic .g,.tok .g{display:none;font-family:'ahicons';font-weight:normal;font-style:normal;line-height:1}
 .ahfont .ic .g,.ahfont .tok .g{display:inline}
 .ahfont .ic .l,.ahfont .tok .l{display:none}
@@ -997,7 +997,7 @@ function chrome(){
   document.getElementById('h1').textContent = l.title;
   document.getElementById('lede').textContent = l.lede(D.length);
   document.getElementById('langbtn').textContent = l.lang;
-  document.getElementById('foot').innerHTML = l.footer;
+  document.getElementById('foot').innerHTML = l.footer + ` <span id="iconstat">· ${document.documentElement.classList.contains('ahfont')?'іконки / icons ✓':'іконки / icons ✗'}</span>`;
   document.querySelectorAll('.tab[data-tab]').forEach(t=>{ t.textContent=l.tabs[t.dataset.tab]; t.setAttribute('aria-selected', t.dataset.tab===S.tab); });
 }
 function render(){
@@ -1070,7 +1070,10 @@ view.addEventListener('input',e=>{
   hydrate(view);
 });
 render();
-try{ if(document.fonts && document.fonts.load){ document.fonts.load('16px ahicons','pbca').then(fs=>{ if(fs && fs.length) document.documentElement.classList.add('ahfont'); }).catch(()=>{}); } }catch(e){}
+(function(){ const ok=()=>{ document.documentElement.classList.add('ahfont'); const e=document.getElementById('iconstat'); if(e) e.textContent='· іконки / icons ✓'; };
+  const probe=()=>{ try{ if(document.fonts.check('16px ahicons','p')){ const c=document.createElement('canvas').getContext('2d'); c.font='40px ahicons, monospace'; const w1=c.measureText('pbcak').width; c.font='40px monospace'; const w2=c.measureText('pbcak').width; if(Math.abs(w1-w2)>0.5) ok(); } }catch(e){} };
+  try{ if(document.fonts && document.fonts.load){ document.fonts.load('16px ahicons','pbca').then(fs=>{ if(fs && fs.length) ok(); else probe(); }).catch(probe); document.fonts.ready.then(probe); } }catch(e){}
+  setTimeout(probe,2500); })();
 
 </script>
 
