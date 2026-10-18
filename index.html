@@ -232,6 +232,57 @@ textarea{min-height:90px;resize:vertical}
 #foot a{color:var(--glow)}
 .pbtn.danger{border-color:var(--sur);color:var(--sur)}
 .pbtn.danger.armed{background:var(--sur);color:#fff}
+
+/* memo */
+.ruterm{display:block;font-size:.72rem;font-weight:500;color:var(--muted);letter-spacing:.02em;font-style:italic}
+.roundbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--night2);border:1px solid #3a4a41;border-radius:8px;padding:10px 12px;position:sticky;top:calc(env(safe-area-inset-top, 0px) + 54px);z-index:4}
+.roundbar .rlabel{font:800 .76rem var(--f-body);text-transform:uppercase;letter-spacing:.09em;color:var(--fgm)}
+.roundbar .rnum{font:400 2rem/1 var(--f-display);color:var(--fg);min-width:1.5ch}
+.roundbar .pbtn{border-color:#3a4a41;color:var(--fg)}
+.roundbar .pbtn.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.roundbar .pbtn.danger{margin-left:auto;border-color:var(--sur);color:#f2a3a8}
+.roundbar .pbtn.danger.armed{background:var(--sur);color:#fff}
+.phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.phase{background:linear-gradient(180deg,rgba(255,255,255,.18),transparent 40%),var(--paper);color:var(--ink);border-radius:6px;border-top:5px solid var(--c);padding:12px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:0 6px 22px rgba(0,0,0,.45);min-width:0}
+.phase.skipped{opacity:.55}
+.phead{display:flex;align-items:center;gap:10px}
+.pnum{width:34px;height:34px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font:400 1.25rem var(--f-display);flex:none}
+.ptitle{min-width:0}
+.ptitle b{font:400 1.3rem/1.1 var(--f-display)}
+.pdone{margin-left:auto;font:600 .85rem var(--f-mono);color:var(--muted)}
+.mstep{display:grid;grid-template-columns:26px 1fr;gap:8px;align-items:start;padding:8px 0;border-top:1px dashed var(--line);cursor:pointer}
+.mstep input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--accent)}
+.mstep b{display:block;font-weight:800}
+.mstep i{display:block;font-style:normal;font-size:.9rem;color:#4a4134;margin-top:2px}
+.mstep:has(input:checked) b{text-decoration:line-through;opacity:.55}
+.mstep:has(input:checked) i{opacity:.5}
+.sumh{list-style:none;cursor:pointer}
+.sumh::-webkit-details-marker{display:none}
+.sumh h3::before{content:'▸ ';}
+details[open]>.sumh h3::before{content:'▾ ';}
+.arow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px dashed var(--line)}
+.pips{display:flex;gap:8px}
+.pip{width:32px;height:32px;border-radius:50%;border:2px solid var(--ink);background:transparent}
+.pip[aria-pressed="true"]{background:var(--ink)}
+.acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.act{border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:rgba(255,255,255,.25);display:flex;flex-direction:column;gap:4px;min-width:0}
+.act .ahead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+.act .ahead b{font:400 1.12rem var(--f-display)}
+.act .ahead .ruterm{display:inline}
+.act p{font-size:.9rem}
+.badge{margin-left:auto;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;border-radius:3px;padding:1px 6px}
+.badge.warn{background:var(--sur);color:#fff}
+.badge.ok2{background:var(--rog);color:#fff}
+.aoo{background:rgba(177,47,56,.12);border-left:4px solid var(--sur);padding:8px 10px;border-radius:4px;font-size:.92rem}
+ol.test{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+ol.test li{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.tn{width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font:600 .85rem var(--f-mono)}
+.kws{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.kw{display:flex;flex-direction:column;gap:2px;border-left:3px solid var(--brass);padding:2px 0 2px 8px}
+.kw b{font-weight:800}
+.kw span:not(.ruterm){font-size:.9rem}
+ul.more{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.memo .ic{vertical-align:middle}
 </style>
 </head>
 <body>
@@ -248,6 +299,7 @@ textarea{min-height:90px;resize:vertical}
   </header>
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" data-tab="decks" aria-selected="true">Сищики</button>
+    <button class="tab" role="tab" data-tab="memo" aria-selected="false">Памʼятка</button>
     <button class="tab" role="tab" data-tab="camps" aria-selected="false">Кампанії</button>
     <button class="tab" role="tab" data-tab="cards" aria-selected="false">Усі карти</button>
     <button class="tab" role="tab" data-tab="pairs" aria-selected="false">Дві руки</button>
@@ -275,7 +327,7 @@ const ICN = [['w','В','W'],['i','І','I'],['c','Б','C'],['a','С','A'],['x','�
 const STR = {
  uk:{
   title:'Колоди Аркхема', lede:n=>`${n} стартових колод для «Ужаса Аркхэма». Тапни сищика, щоб побачити колоду. Тапни карту, щоб побачити скан і деталі.`,
-  tabs:{decks:'Сищики',camps:'Кампанії',cards:'Усі карти',pairs:'Дві руки',coll:'Колекція',xp:'Досвід'},
+  tabs:{decks:'Сищики',memo:'Памʼятка',camps:'Кампанії',cards:'Усі карти',pairs:'Дві руки',coll:'Колекція',xp:'Досвід'},
   fac:{guardian:'Вартовий',seeker:'Шукач',rogue:'Розбійник',mystic:'Містик',survivor:'Виживальник',neutral:'Нейтральні'},
   type:{event:'Подія',skill:'Навичка',asset:'Актив',investigator:'Сищик',enemy:'Ворог',treachery:'Підступ'},
   typesPl:{event:'Події',skill:'Навички',asset:'Активи'},
@@ -318,7 +370,7 @@ const STR = {
  },
  en:{
   title:'Arkham Decks', lede:n=>`${n} starter decks for Arkham Horror: The Card Game. Tap an investigator to see the deck. Tap a card to see its scan and details.`,
-  tabs:{decks:'Investigators',camps:'Campaigns',cards:'All cards',pairs:'Two-handed',coll:'Collection',xp:'Experience'},
+  tabs:{decks:'Investigators',memo:'Reference',camps:'Campaigns',cards:'All cards',pairs:'Two-handed',coll:'Collection',xp:'Experience'},
   fac:{guardian:'Guardian',seeker:'Seeker',rogue:'Rogue',mystic:'Mystic',survivor:'Survivor',neutral:'Neutral'},
   type:{event:'Event',skill:'Skill',asset:'Asset',investigator:'Investigator',enemy:'Enemy',treachery:'Treachery'},
   typesPl:{event:'Events',skill:'Skills',asset:'Assets'},
@@ -520,6 +572,157 @@ document.getElementById('sheet').addEventListener('click',e=>{
   if(e.target.dataset.close) closeSheet();
 });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
+
+/* ---------- reference card (memo) ---------- */
+const MEMO = {
+ ui:{
+  uk:{title:'Пам\'ятка гравця', lede:'Хід раунду по фазах, дії та перевірка навички. Відмічай кроки по ходу гри — так нічого не пропустиш. Дрібним шрифтом — офіційні терміни з російського видання.',
+      round:'Раунд', next:'Наступний раунд →', resetAll:'Почати сценарій заново', skip:'У першому раунді фазу Мифа пропускають.', setupT:'Підготовка сценарію', setupNote:'Один раз перед сценарієм.', resetSetup:'Скинути',
+      invN:'Сищиків', actions:'Дії за хід', actNote:'Тапай кружечки, щоб рахувати витрачені дії (3 на хід).', inv:'Сищик', actsT:'Дії', aoo:'Внеочередна атака', noAoo:'Без внеочередної атаки', free:'Без дії', stT:'Перевірка навички', kwT:'Вороги та ключові слова', moreT:'Важливе', slotsT:'Слоти активів', ru:'рос.', done:(a,b)=>`${a}/${b}`, sure:'Точно почати заново?'},
+  ru:{title:'Памятка игрока', lede:'Ход раунда по фазам, действия и проверка навыка. Отмечайте шаги по ходу игры — так ничего не пропустите. Термины — как в русском издании Hobby World.',
+      round:'Раунд', next:'Следующий раунд →', resetAll:'Начать сценарий заново', skip:'В первом раунде фазу Мифа пропускают.', setupT:'Подготовка сценария', setupNote:'Один раз перед сценарием.', resetSetup:'Сбросить',
+      invN:'Сыщиков', actions:'Действия за ход', actNote:'Нажимайте кружки, чтобы считать потраченные действия (3 за ход).', inv:'Сыщик', actsT:'Действия', aoo:'Внеочередная атака', noAoo:'Без внеочередной атаки', free:'Без действия', stT:'Проверка навыка', kwT:'Враги и ключевые слова', moreT:'Важное', slotsT:'Слоты активов', ru:'', done:(a,b)=>`${a}/${b}`, sure:'Точно начать заново?'},
+  en:{title:'Player reference', lede:'Round structure by phase, actions and skill tests. Tick the steps as you play so nothing gets skipped. Small print shows the official terms from the Russian edition.',
+      round:'Round', next:'Next round →', resetAll:'Restart scenario', skip:'Skip the Mythos phase in the first round.', setupT:'Scenario setup', setupNote:'Once before each scenario.', resetSetup:'Clear',
+      invN:'Investigators', actions:'Actions this turn', actNote:'Tap the circles to count spent actions (3 per turn).', inv:'Investigator', actsT:'Actions', aoo:'Attack of opportunity', noAoo:'No attack of opportunity', free:'No action', stT:'Skill test', kwT:'Enemies and keywords', moreT:'Good to know', slotsT:'Asset slots', ru:'RU', done:(a,b)=>`${a}/${b}`, sure:'Really restart?'}
+ },
+ setup:[
+  {uk:'Збери мішок хаосу за рівнем складності з книги кампанії.', ru:'Соберите мешок хаоса по уровню сложности из руководства кампании.', en:'Build the chaos bag for your difficulty from the campaign guide.'},
+  {uk:'Вибери ведучого сищика — він вирішує спірні моменти.', ru:'Выберите ведущего сыщика — он решает спорные вопросы.', en:'Choose the lead investigator — they settle ties and choices.'},
+  {uk:'Кожен сищик бере 5 ресурсів із резерву.', ru:'Каждый сыщик берёт 5 ресурсов из резерва.', en:'Each investigator takes 5 resources from the token pool.'},
+  {uk:'Перетасуй колоду (з сигнатурними картами й слабкостями) і візьми 5 карт. Слабкість, що прийшла при підготовці, відклади й візьми іншу карту.', ru:'Перемешайте колоду (с персональными картами и слабостями) и возьмите 5 карт. Слабость, взятую при подготовке, отложите и возьмите другую карту.', en:'Shuffle your deck (with signature cards and weaknesses) and draw 5. A weakness drawn during setup is set aside and replaced.'},
+  {uk:'Заміна (раз): відклади будь-які карти зі стартової руки, візьми стільки ж, потім замішай відкладене назад.', ru:'Замена (один раз): отложите любые карты стартовой руки, возьмите столько же, затем замешайте отложенные обратно.', en:'Mulligan (once): set aside any cards from your opening hand, draw that many, then shuffle the set-aside cards back.'},
+  {uk:'Підготуй сценарій за книгою: колоди сцен і замислів, локації, колоду контактів. Прочитай вступ.', ru:'Подготовьте сценарий по руководству: колоды сцен и замыслов, локации, колоду контактов. Прочитайте вступление.', en:'Set up the scenario from the guide: act and agenda decks, locations, encounter deck. Read the intro.'},
+ ],
+ phases:[
+  {id:'myth', c:'mys', n:{uk:'Фаза Міфів',ru:'Фаза Мифа',en:'Mythos phase'}, skip1:true, steps:[
+    {t:{uk:'Поклади 1 безвихідь на поточний замисел',ru:'Положите 1 безысходность на текущий замысел',en:'Place 1 doom on the current agenda'}, d:{uk:'Жетон безвиході (doom) — таймер сценарію.',ru:'Жетон безысходности — таймер сценария.',en:'Doom is the scenario\'s clock.'}},
+    {t:{uk:'Перевір, чи досягнуто потрібної кількості безвиході',ru:'Проверьте, не достигнуто ли требуемое число безысходности',en:'Check the doom threshold'}, d:{uk:'Рахуй УСЮ безвихідь у грі: на замислі, ворогах, картах. Якщо вона ≥ числа на замислі — замисел просувається: прибери безвихідь і прочитай зворот.',ru:'Считайте ВСЮ безысходность в игре: на замысле, врагах, картах. Если она ≥ числа на замысле — замысел продвигается: уберите безысходность и прочитайте оборот.',en:'Count ALL doom in play: agenda, enemies, other cards. If it meets the agenda\'s threshold, the agenda advances: remove the doom and read the back.'}},
+    {t:{uk:'Кожен сищик бере 1 карту контакту',ru:'Каждый сыщик берёт 1 карту контакта',en:'Each investigator draws 1 encounter card'}, d:{uk:'По черзі гравців. Ворог виходить за своїм «Выходит» (або у твою локацію й сражається з тобою). Напасть — виконай «Раскрытие». «Наплыв» — візьми ще одну карту.',ru:'В порядке игроков. Враг выходит по указанию «Выходит» (или в вашу локацию и сражается с вами). Напасть — разыграйте «Раскрытие». «Наплыв» — возьмите ещё карту.',en:'In player order. An enemy spawns per its Spawn instruction (or at your location, engaged with you). A treachery: resolve its Revelation. Surge: draw another card.'}},
+  ]},
+  {id:'inv', c:'see', n:{uk:'Фаза сищиків',ru:'Фаза сыщиков',en:'Investigation phase'}, steps:[
+    {t:{uk:'Домовтеся про порядок ходів',ru:'Договоритесь о порядке ходов',en:'Agree on turn order'}, d:{uk:'Порядок можна міняти щораунду. Якщо не домовились — вирішує ведучий сищик.',ru:'Порядок можно менять каждый раунд. Если не договорились — решает ведущий сыщик.',en:'Order can change every round. If you cannot agree, the lead investigator decides.'}},
+    {t:{uk:'Кожен сищик робить свій хід: до 3 дій',ru:'Каждый сыщик делает ход: до 3 действий',en:'Each investigator takes a turn: up to 3 actions'}, d:{uk:'Будь-які дії, у будь-якому порядку, можна повторювати. Список дій — нижче. Швидкі (Быстрое) карти й реакції — без дії.',ru:'Любые действия, в любом порядке, можно повторять. Список действий — ниже. Быстрые карты и реакции — без действия.',en:'Any actions, in any order, repeats allowed. See the action list below. Fast cards and reactions cost no action.'}},
+    {t:{uk:'Просуньте сцену, якщо є улики',ru:'Продвиньте сцену, если хватает улик',en:'Advance the act if you have the clues'}, d:{uk:'Разом витратьте потрібну кількість улик — це без дії, у хід будь-якого сищика. Зайві улики лишаються у вас.',ru:'Совместно потратьте требуемое число улик — это без действия, в ход любого сыщика. Лишние улики остаются у вас.',en:'Spend the required clues as a group — no action, during any investigator\'s turn. Extra clues stay with you.'}},
+    {t:{uk:'Переверни міні-карту після ходу',ru:'Переверните мини-карту после хода',en:'Flip your mini-card when your turn ends'}, d:{uk:'Так видно, хто вже ходив у цьому раунді.',ru:'Так видно, кто уже ходил в этом раунде.',en:'Shows who has already acted this round.'}},
+  ]},
+  {id:'enemy', c:'sur', n:{uk:'Фаза ворогів',ru:'Фаза врагов',en:'Enemy phase'}, steps:[
+    {t:{uk:'Вороги-Мисливці рухаються',ru:'Враги-Охотники перемещаются',en:'Hunter enemies move'}, d:{uk:'Кожен розвернутий Мисливець, який ні з ким не сражається і стоїть без сищиків, рухається на 1 локацію до найближчого сищика («Добыча» вирішує, до кого). Дійшов — починає сражатися.',ru:'Каждый развёрнутый Охотник, который ни с кем не сражается и стоит без сыщиков, перемещается на 1 локацию к ближайшему сыщику («Добыча» решает, к кому). Дошёл — начинает сражаться.',en:'Each ready, unengaged Hunter with no investigator at its location moves 1 location toward the nearest investigator (Prey picks whom). If it reaches one, it engages.'}},
+    {t:{uk:'Вороги атакують',ru:'Враги атакуют',en:'Enemies attack'}, d:{uk:'По черзі гравців: кожен розвернутий ворог, що сражається з тобою, завдає свої рани й жах одночасно, а потім повертається (виснажується). Рани/жах можна розподілити на активи зі здоровʼям/розсудком.',ru:'В порядке игроков: каждый развёрнутый враг, сражающийся с вами, наносит раны и ужас одновременно, затем поворачивается. Раны и ужас можно распределить на активы со здоровьем/рассудком.',en:'In player order: each ready enemy engaged with you deals its damage and horror at once, then exhausts. You may assign damage/horror to assets with health/sanity.'}},
+  ]},
+  {id:'up', c:'gua', n:{uk:'Фаза передишки',ru:'Фаза передышки',en:'Upkeep phase'}, steps:[
+    {t:{uk:'Переверни міні-карти назад',ru:'Переверните мини-карты обратно',en:'Flip mini-cards back'}, d:{uk:'Дії знову доступні.',ru:'Действия снова доступны.',en:'Actions reset.'}},
+    {t:{uk:'Розверни всі повернуті карти',ru:'Разверните все повёрнутые карты',en:'Ready all exhausted cards'}, d:{uk:'Свої активи і ворогів. Розвернутий ворог у твоїй локації, що ні з ким не сражається, починає сражатися з тобою.',ru:'Свои активы и врагов. Развёрнутый враг в вашей локации, который ни с кем не сражается, начинает сражаться с вами.',en:'Your assets and enemies. A readied unengaged enemy at your location engages you.'}},
+    {t:{uk:'Кожен бере 1 карту і 1 ресурс',ru:'Каждый берёт 1 карту и 1 ресурс',en:'Each draws 1 card and gains 1 resource'}, d:{uk:'Колода закінчилась — замішай скид у колоду, візьми карту й отримай 1 жах.',ru:'Колода кончилась — замешайте сброс в колоду, возьмите карту и получите 1 ужас.',en:'Deck empty? Shuffle your discard in, draw, and take 1 horror.'}},
+    {t:{uk:'Перевір розмір руки: максимум 8',ru:'Проверьте размер руки: максимум 8',en:'Check hand size: maximum 8'}, d:{uk:'Зайві карти скинь на свій вибір.',ru:'Лишние карты сбросьте на свой выбор.',en:'Discard down to 8, your choice.'}},
+  ]},
+ ],
+ actions:[
+  {n:{uk:'Дослідження',ru:'Исследование',en:'Investigate'}, a:1, d:{uk:'Перевірка {I} проти неясності локації. Успіх — знайди 1 улику.',ru:'Проверка {I} против неясности локации. Успех — найдите 1 улику.',en:'{I} test vs the location\'s shroud. Success: discover 1 clue.'}},
+  {n:{uk:'Рух',ru:'Движение',en:'Move'}, a:1, d:{uk:'У звʼязану локацію. Закрита локація відкривається — поклади на неї улики. Вороги, що сражаються з тобою, йдуть слідом.',ru:'В связанную локацию. Закрытая локация открывается — положите на неё улики. Враги, сражающиеся с вами, идут следом.',en:'To a connecting location. An unrevealed location is revealed — place its clues. Engaged enemies follow you.'}},
+  {n:{uk:'Взяти карту',ru:'Взять карту',en:'Draw'}, a:1, d:{uk:'Візьми 1 карту з колоди.',ru:'Возьмите 1 карту из колоды.',en:'Draw 1 card.'}},
+  {n:{uk:'Взяти ресурс',ru:'Взять ресурс',en:'Resource'}, a:1, d:{uk:'Візьми 1 ресурс.',ru:'Возьмите 1 ресурс.',en:'Gain 1 resource.'}},
+  {n:{uk:'Зіграти карту',ru:'Сыграть карту',en:'Play'}, a:1, d:{uk:'Заплати ціну й зіграй актив або подію. Швидкі (Быстрое) карти — без дії, у будь-який момент, коли дозволено.',ru:'Заплатите цену и сыграйте актив или событие. Быстрые карты — без действия, в любой разрешённый момент.',en:'Pay the cost to play an asset or event. Fast cards need no action and can be played whenever allowed.'}},
+  {n:{uk:'Активація',ru:'Активация',en:'Activate'}, a:1, d:{uk:'Властивість зі значком [дія] на карті (актив, локація, ворог, сцена). Скільки значків — стільки дій.',ru:'Свойство со значком [действие] на карте (актив, локация, враг, сцена). Сколько значков — столько действий.',en:'An ability with the [action] icon on a card (asset, location, enemy, act). One action per icon.'}},
+  {n:{uk:'Почати сражатися',ru:'Начать сражаться',en:'Engage'}, a:1, d:{uk:'Почни сражатися з ворогом у своїй локації (так можна й з «Осторожным»).',ru:'Начните сражаться с врагом в вашей локации (так можно и с «Осторожным»).',en:'Engage an enemy at your location (works on Aloof enemies too).'}},
+  {n:{uk:'Бій',ru:'Бой',en:'Fight'}, a:0, d:{uk:'Перевірка {C} проти бою ворога. Успіх — 1 рана (+ бонус зброї). Провал проти ворога, що сражається з іншим сищиком, — рана йде тому сищикові.',ru:'Проверка {C} против боя врага. Успех — 1 рана (+ бонус оружия). Провал против врага, сражающегося с другим сыщиком, — рана достаётся тому сыщику.',en:'{C} test vs the enemy\'s fight. Success: 1 damage (+ weapon bonus). Failing against an enemy engaged with another investigator damages that investigator.'}},
+  {n:{uk:'Ухід',ru:'Уход',en:'Evade'}, a:0, d:{uk:'Перевірка {A} проти уходу ворога. Успіх — поверни ворога й більше не сражайся з ним.',ru:'Проверка {A} против ухода врага. Успех — поверните врага и перестаньте с ним сражаться.',en:'{A} test vs the enemy\'s evade. Success: exhaust it and disengage.'}},
+  {n:{uk:'Переговори',ru:'Переговоры',en:'Parley'}, a:0, d:{uk:'Тільки властивість карти з позначкою «Переговоры».',ru:'Только свойство карты с пометкой «Переговоры».',en:'Only through a card ability marked Parley.'}},
+  {n:{uk:'Втеча',ru:'Побег',en:'Resign'}, a:0, d:{uk:'Властивість «Побег» на локації чи карті: виходиш зі сценарію, не будучи переможеним.',ru:'Свойство «Побег» на локации или карте: вы выходите из сценария, не будучи побеждённым.',en:'A Resign ability on a location or card: you leave the scenario without being defeated.'}},
+ ],
+ aooNote:{uk:'Якщо з тобою сражається хоча б 1 розвернутий ворог, будь-яка дія, крім Бою, Уходу, Переговорів і Втечі, викликає його внеочередну атаку (ворог після неї не повертається).',ru:'Если с вами сражается хотя бы 1 развёрнутый враг, любое действие, кроме Боя, Ухода, Переговоров и Побега, вызывает его внеочередную атаку (враг после неё не поворачивается).',en:'If at least 1 ready enemy is engaged with you, any action other than Fight, Evade, Parley or Resign provokes its attack of opportunity (it does not exhaust afterwards).'},
+ test:[
+  {uk:'Визнач навичку й складність.',ru:'Определите навык и сложность.',en:'Determine the skill and difficulty.'},
+  {uk:'Додай карти з руки: кожен збіглий символ навички +1, дикий ★ підходить до всього. Інші сищики у твоїй локації — по 1 карті.',ru:'Добавьте карты с руки: каждый совпавший символ +1, символ ★ подходит ко всему. Другие сыщики в вашей локации — по 1 карте.',en:'Commit cards from hand: each matching icon +1, wild ★ matches anything. Other investigators at your location may commit 1 card each.'},
+  {uk:'Витягни 1 жетон хаосу.',ru:'Вытяните 1 жетон хаоса.',en:'Reveal 1 chaos token.'},
+  {uk:'Застосуй жетон: число — модифікатор. Череп, культист, табличка, древній — дивись карту сценарію. Знак Старших богів — властивість твого сищика. Щупальця — автоматичний провал.',ru:'Примените жетон: число — модификатор. Череп, культист, табличка, древний — смотрите карту сценария. Знак Старших богов — свойство вашего сыщика. Щупальца — автоматический провал.',en:'Apply the token: a number is a modifier. Skull, cultist, tablet, elder thing — see the scenario card. Elder Sign — your investigator\'s ability. Tentacles — automatic failure.'},
+  {uk:'Порівняй: навичка (не менше 0) ≥ складності — успіх. «Превысили на X» — різниця.',ru:'Сравните: навык (не меньше 0) ≥ сложности — успех. «Превысили на X» — разница.',en:'Compare: skill (minimum 0) ≥ difficulty is a success. “Succeed by X” is the difference.'},
+  {uk:'Виконай наслідки, скинь додані карти, поверни жетон у мішок.',ru:'Примените результат, сбросьте добавленные карты, верните жетон в мешок.',en:'Apply the result, discard committed cards, return the token to the bag.'},
+ ],
+ kw:[
+  {n:{uk:'Сражатися',ru:'Сражаться',en:'Engaged'}, d:{uk:'Розвернутий ворог у твоїй локації, що ні з ким не сражається, одразу починає сражатися з тобою і лягає в зону загрози.',ru:'Развёрнутый враг в вашей локации, который ни с кем не сражается, сразу начинает сражаться с вами и кладётся в зону угрозы.',en:'A ready, unengaged enemy at your location engages you at once and goes to your threat area.'}},
+  {n:{uk:'Виходить',ru:'Выходит',en:'Spawn'}, d:{uk:'Куди ставити ворога при появі.',ru:'Куда выкладывать врага при появлении.',en:'Where the enemy enters play.'}},
+  {n:{uk:'Здобич',ru:'Добыча',en:'Prey'}, d:{uk:'Кого ворог обирає, якщо підходять кілька сищиків.',ru:'Кого враг выбирает, если подходят несколько сыщиков.',en:'Which investigator the enemy picks when several qualify.'}},
+  {n:{uk:'Мисливець',ru:'Охотник',en:'Hunter'}, d:{uk:'У фазі ворогів рухається до найближчого сищика.',ru:'В фазе врагов перемещается к ближайшему сыщику.',en:'Moves toward the nearest investigator in the enemy phase.'}},
+  {n:{uk:'Обережний',ru:'Осторожный',en:'Aloof'}, d:{uk:'Сам не сражається. Щоб атакувати, спершу дія «Начать сражаться».',ru:'Сам не вступает в схватку. Чтобы атаковать, сначала действие «Начать сражаться».',en:'Does not engage on its own. Use the Engage action before fighting it.'}},
+  {n:{uk:'Месник',ru:'Мститель',en:'Retaliate'}, d:{uk:'Провалиш атаку по розвернутому — він атакує тебе.',ru:'Провалите атаку по развёрнутому — он атакует вас.',en:'Fail an attack against it while it is ready and it attacks you.'}},
+  {n:{uk:'Пильний',ru:'Бдительный',en:'Alert'}, d:{uk:'Провалиш ухід — він атакує тебе.',ru:'Провалите уход — он атакует вас.',en:'Fail to evade it and it attacks you.'}},
+  {n:{uk:'Величезний',ru:'Огромный',en:'Massive'}, d:{uk:'Сражається з усіма сищиками у своїй локації.',ru:'Сражается со всеми сыщиками в своей локации.',en:'Engaged with every investigator at its location.'}},
+  {n:{uk:'Прагнення',ru:'Стремление',en:'Patrol'}, d:{uk:'У фазі ворогів рухається до вказаної локації.',ru:'В фазе врагов перемещается к указанной локации.',en:'Moves toward the named location in the enemy phase.'}},
+  {n:{uk:'Елітний',ru:'Элитный',en:'Elite'}, d:{uk:'Багато ефектів на нього не діють («не элитный»).',ru:'Многие эффекты на него не действуют («не элитный»).',en:'Immune to many effects (“non-Elite”).'}},
+  {n:{uk:'Наплив',ru:'Наплыв',en:'Surge'}, d:{uk:'Після цієї карти контакту візьми ще одну.',ru:'После этой карты контакта возьмите ещё одну.',en:'Draw another encounter card after this one.'}},
+  {n:{uk:'Небезпека',ru:'Опасность',en:'Peril'}, d:{uk:'Виконуєш сам: інші не можуть додавати карти чи грати їх тобі на допомогу.',ru:'Разыгрываете сами: другие не могут добавлять карты или играть их вам на помощь.',en:'You resolve it alone: others cannot commit or play cards to help.'}},
+  {n:{uk:'Перемога X',ru:'Победа X',en:'Victory X'}, d:{uk:'Переможеного ворога чи досліджену локацію клади на «победный счёт» — це досвід після сценарію.',ru:'Побеждённого врага или исследованную локацию кладите на победный счёт — это опыт после сценария.',en:'A defeated enemy or cleared location goes to the victory display — XP after the scenario.'}},
+ ],
+ more:[
+  {uk:'Рани ≥ здоровʼя або жах ≥ розсудку — сищика переможено, він вибуває зі сценарію. У кампанії: від ран — 1 фізична травма, від жаху — 1 ментальна.', ru:'Раны ≥ здоровья или ужас ≥ рассудка — сыщик побеждён и выбывает из сценария. В кампании: от ран — 1 физическая травма, от ужаса — 1 ментальная.', en:'Damage ≥ health or horror ≥ sanity: the investigator is defeated and leaves the scenario. In a campaign: 1 physical trauma from damage, 1 mental trauma from horror.'},
+  {uk:'Направлені рани/жах не можна перекласти на активи.', ru:'Направленные раны/ужас нельзя распределить на активы.', en:'Direct damage/horror cannot be assigned to assets.'},
+  {uk:'«Обязательно» — спрацьовує саме, пропускати не можна. «Быстрое» і реакції [↺] — без дії.', ru:'«Обязательно» — срабатывает само, пропускать нельзя. «Быстрое» и реакции [↺] — без действия.', en:'Forced triggers on its own and cannot be skipped. Fast and reactions [↺] cost no action.'},
+  {uk:'Усі вибули — сценарій закінчено, читай відповідну розвʼязку.', ru:'Все выбыли — сценарий окончен, читайте соответствующую развязку.', en:'If everyone is eliminated the scenario ends — read the matching resolution.'},
+ ],
+ slots:{uk:'2 руки · 2 тайних (магічних) · 1 тіло · 1 аксесуар · 1 союзник · 1 таро', ru:'2 слота руки · 2 магических · 1 тела · 1 аксессуара · 1 союзника · 1 таро', en:'2 hand · 2 arcane · 1 body · 1 accessory · 1 ally · 1 tarot'},
+};
+
+let M = store.get('memo') || {round:1, ck:{}, setup:{}, n:1, act:[0,0,0,0]};
+if(!M.act) M.act=[0,0,0,0];
+let memoLang = store.get('memoLang') || null;
+const ML = () => memoLang || (EN()?'en':'uk');
+const saveM = () => store.set('memo', M);
+let memoArmed = false;
+
+const SKL = {W:['w',{uk:'В',ru:'В',en:'W'},{uk:'Воля',ru:'Воля',en:'Willpower'}],I:['i',{uk:'І',ru:'И',en:'I'},{uk:'Інтелект',ru:'Интеллект',en:'Intellect'}],C:['c',{uk:'Б',ru:'Б',en:'C'},{uk:'Бій',ru:'Бой',en:'Combat'}],A:['a',{uk:'С',ru:'Л',en:'A'},{uk:'Спритність',ru:'Ловкость',en:'Agility'}]};
+const mt = (txt,lg) => esc(txt).replace(/\{([WICA])\}/g,(m,k)=>`<span class="ic ${SKL[k][0]}" title="${SKL[k][2][lg]}">${SKL[k][1][lg]}</span>`);
+function vMemo(){
+  const lg = ML(), u = MEMO.ui[lg], ruTag = s => lg==='ru' ? '' : `<span class="ruterm">${u.ru}: ${esc(s)}</span>`;
+  const langs = [['uk','УКР'],['ru','РУС'],['en','ENG']].map(([k,l])=>`<button class="chip" data-mlang="${k}" aria-pressed="${lg===k}">${l}</button>`).join('');
+  const setup = MEMO.setup.map((s,i)=>`<label class="mstep" for="ms_${i}"><input type="checkbox" id="ms_${i}" data-msetup="${i}" ${M.setup[i]?'checked':''}><span>${esc(s[lg])}</span></label>`).join('');
+  const sDone = MEMO.setup.filter((s,i)=>M.setup[i]).length;
+  const phases = MEMO.phases.map((p,pi)=>{
+    const skipped = p.skip1 && M.round===1;
+    const done = p.steps.filter((s,si)=>M.ck[`${p.id}${si}`]).length;
+    return `<section class="phase c-${({mys:'mystic',see:'seeker',sur:'survivor',gua:'guardian'})[p.c]} ${skipped?'skipped':''}">
+      <div class="phead"><span class="pnum">${pi+1}</span><div class="ptitle"><b>${esc(p.n[lg])}</b>${ruTag(p.n.ru)}</div><span class="pdone">${skipped?'—':u.done(done,p.steps.length)}</span></div>
+      ${skipped?`<p class="note">${u.skip}</p>`:''}
+      ${p.steps.map((s,si)=>`<label class="mstep" for="mk_${p.id}${si}"><input type="checkbox" id="mk_${p.id}${si}" data-mstep="${p.id}${si}" ${M.ck[`${p.id}${si}`]?'checked':''} ${skipped?'disabled':''}><span><b>${pi+1}.${si+1} ${esc(s.t[lg])}</b>${lg!=='ru'?`<span class="ruterm">${u.ru}: ${esc(s.t.ru)}</span>`:''}<i>${esc(s.d[lg])}</i></span></label>`).join('')}
+    </section>`;
+  }).join('');
+  const pips = Array.from({length:M.n},(_,i)=>`<div class="arow"><span>${u.inv} ${i+1}</span><span class="pips">${[0,1,2].map(j=>`<button class="pip" data-pip="${i}:${j}" aria-pressed="${M.act[i]>j}" aria-label="${u.actsT} ${j+1}"></button>`).join('')}</span></div>`).join('');
+  const acts = MEMO.actions.map(a=>`<div class="act"><div class="ahead"><b>${esc(a.n[lg])}</b>${ruTag(a.n.ru)}<span class="badge ${a.a?'warn':'ok2'}">${a.a?u.aoo:u.noAoo}</span></div><p>${mt(a.d[lg],lg)}</p></div>`).join('');
+  const test = MEMO.test.map((t,i)=>`<li><span class="tn">${i+1}</span><span>${esc(t[lg])}</span></li>`).join('');
+  const kw = MEMO.kw.map(k=>`<div class="kw"><b>${esc(k.n[lg])}</b>${ruTag(k.n.ru)}<span>${esc(k.d[lg])}</span></div>`).join('');
+  const more = MEMO.more.map(m=>`<li>${esc(m[lg])}</li>`).join('');
+  return `<div class="memo" style="display:flex;flex-direction:column;gap:14px">
+    <div class="panel">
+      <div class="toolbar"><h2>${u.title}</h2><span class="filters">${langs}</span></div>
+      <p class="note">${u.lede}</p>
+    </div>
+    <details class="panel" ${sDone<MEMO.setup.length&&M.round===1?'open':''}><summary class="sumh"><h3>${u.setupT} · ${u.done(sDone,MEMO.setup.length)}</h3></summary>
+      <p class="note">${u.setupNote}</p>${setup}<div class="btnrow"><button class="pbtn" data-msetupreset="1">${u.resetSetup}</button></div></details>
+    <div class="roundbar"><span class="rlabel">${u.round}</span><span class="rnum">${M.round}</span><button class="pbtn primary" data-mnext="1">${u.next}</button><button class="pbtn danger ${memoArmed?'armed':''}" data-mreset="1">${memoArmed?u.sure:u.resetAll}</button></div>
+    <div class="phases">${phases}</div>
+    <div class="panel"><div class="toolbar"><h3>${u.actions}</h3><span class="seg">${[1,2,3,4].map(n=>`<button data-mn="${n}" aria-pressed="${M.n===n}">${n}</button>`).join('')}</span></div><p class="note">${u.actNote}</p>${pips}</div>
+    <div class="panel"><h3>${u.actsT}</h3><div class="acts">${acts}</div><p class="aoo">${esc(MEMO.aooNote[lg])}</p></div>
+    <div class="panel"><h3>${u.stT}</h3><ol class="test">${test}</ol></div>
+    <div class="panel"><h3>${u.kwT}</h3><div class="kws">${kw}</div></div>
+    <div class="panel"><h3>${u.moreT}</h3><ul class="more">${more}</ul><h3>${u.slotsT}</h3><p>${esc(MEMO.slots[lg])}</p></div>
+  </div>`;
+}
+function memoClick(el){
+  const ds = el.dataset;
+  if(ds.mlang){ memoLang = ds.mlang; store.set('memoLang', memoLang); render(); return true; }
+  if(ds.mnext){ M.round++; M.ck={}; M.act=[0,0,0,0]; memoArmed=false; saveM(); render(); window.scrollTo({top:0}); return true; }
+  if(ds.mreset){ if(!memoArmed){ memoArmed=true; render(); return true; } M={round:1,ck:{},setup:{},n:M.n,act:[0,0,0,0]}; memoArmed=false; saveM(); render(); return true; }
+  if(ds.msetupreset){ M.setup={}; saveM(); render(); return true; }
+  if(ds.mn){ M.n=+ds.mn; saveM(); render(); return true; }
+  if(ds.pip){ const [i,j]=ds.pip.split(':').map(Number); M.act[i] = M.act[i]>j ? j : j+1; saveM(); render(); return true; }
+  return false;
+}
+function memoChange(t){
+  const ds=t.dataset;
+  if(ds.mstep){ M.ck[ds.mstep]=t.checked; saveM(); render(); return true; }
+  if(ds.msetup){ M.setup[ds.msetup]=t.checked; saveM(); render(); return true; }
+  return false;
+}
 
 /* ---------- views ---------- */
 const view = document.getElementById('view');
@@ -745,6 +948,7 @@ function render(){
   else if(S.tab==='cards') view.innerHTML = vCards();
   else if(S.tab==='pairs'){ view.innerHTML = vPairs(); const pa=document.getElementById('pa'), pb=document.getElementById('pb'); if(pa&&pa.options.length){ pa.value=S.pa&&[...pa.options].some(o=>o.value===S.pa)?S.pa:pa.options[0].value; pb.value=S.pb&&[...pb.options].some(o=>o.value===S.pb)?S.pb:(pb.options[1]||pb.options[0]).value; checkPair(); } }
   else if(S.tab==='coll') view.innerHTML = vColl();
+  else if(S.tab==='memo') view.innerHTML = vMemo();
   else view.innerHTML = vXP();
   hydrate(view);
 }
@@ -753,6 +957,7 @@ function go(id, ctx=null){ S.deck=id; S.ctx=ctx; if(!ctx) S.tab='decks'; render(
 document.getElementById('langbtn').addEventListener('click',()=>{ S.lang = EN()?'uk':'en'; store.set('lang',S.lang); failed.clear(); render(); });
 document.querySelector('.tabs').addEventListener('click',e=>{const t=e.target.closest('.tab[data-tab]'); if(!t) return; S.tab=t.dataset.tab; S.deck=null; S.ctx=null; S.armed=null; render();});
 view.addEventListener('click',e=>{
+  const me=e.target.closest('[data-mlang],[data-mnext],[data-mreset],[data-msetupreset],[data-mn],[data-pip]'); if(me && memoClick(me)) return;
   const el=e.target.closest('[data-card],[data-go],[data-back],[data-filter],[data-mode],[data-reset],[data-cf],[data-pa],[data-fav],[data-tick],[data-tabgo],[data-poolset],[data-export],[data-import],[data-newcamp],[data-cancelcamp],[data-ncinv],[data-createcamp],[data-opencamp],[data-closecamp],[data-campdeck],[data-backcamp],[data-ctr],[data-rminv],[data-addinv],[data-delcamp]');
   if(!el) return; const ds=el.dataset, l=L();
   if(ds.fav){ S.favs = isFav(ds.fav) ? S.favs.filter(x=>x!==ds.fav) : S.favs.concat(ds.fav); store.set('favs',S.favs); el.setAttribute('aria-pressed',isFav(ds.fav)); if(S.filter==='fav'&&!S.deck) render(); return; }
@@ -788,6 +993,7 @@ view.addEventListener('click',e=>{
 function updCount(){ const h=document.getElementById('deckcount'); if(!h) return; const d=deckById(S.deck), l=adapt(d,activePool()).list; h.textContent=L().deckT(total(l),gotCount(d,l)); }
 view.addEventListener('change',e=>{
   const t=e.target, ds=t.dataset;
+  if(memoChange(t)) return;
   if(ds.ck){ toggleCheck(S.deck, ds.ck); updCount(); return; }
   if(t.id==='pa'||t.id==='pb'){ S.pa=document.getElementById('pa').value; S.pb=document.getElementById('pb').value; checkPair(); return; }
   if(ds.pool){ S.pool = t.checked ? ALLBOX.filter(k=>S.pool.includes(k)||k===ds.pool) : S.pool.filter(k=>k!==ds.pool); store.set('pool',S.pool); render(); return; }
