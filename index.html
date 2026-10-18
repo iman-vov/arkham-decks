@@ -310,6 +310,8 @@ ul.more{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
 .gbody p{max-width:65ch}
 .gex{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .gcard{border:1px solid var(--line);background:rgba(255,255,255,.35);border-radius:999px;padding:3px 10px;font-size:.84rem;display:inline-flex;gap:6px;align-items:center;color:var(--ink)}
+.gletter{font:400 1.5rem var(--f-display);color:var(--ink);text-transform:none;letter-spacing:0;border-bottom:1px solid var(--line);padding-bottom:2px}
+.panel .seg{border-color:var(--line)}
 </style>
 </head>
 <body>
@@ -880,7 +882,9 @@ const G = [
  {c:'deck',n:{uk:'Ведучий сищик',ru:'Ведущий сыщик',en:'Lead investigator'},d:{uk:'Вирішує спірні вибори і в багатьох ефектах сценарію.',ru:'Решает спорные выборы и указан во многих эффектах сценария.',en:'Breaks ties and is named in many scenario effects.'}},
 ];
 
-let GQ = '', GC = 'all', GOPEN = null;
+let GQ = '', GC = 'all', GOPEN = null, GS = store.get('glossSort') || 'abc';
+const gkey = (e,lg) => e.n[lg].replace(/^[«"“„'(]+/,'');
+const LOC = {uk:'uk',ru:'ru',en:'en'};
 const gname = (e,lg) => e.n[lg];
 function vGloss(){
   const lg = ML(), u = MEMO.ui[lg];
@@ -891,10 +895,14 @@ function vGloss(){
   const q = GQ.trim().toLowerCase();
   const list = G.map((e,ix)=>({e,ix})).filter(({e})=> (GC==='all'||e.c===GC) && (!q || ['uk','ru','en'].some(k=>e.n[k].toLowerCase().includes(q)||e.d[k].toLowerCase().includes(q))));
   const cats = `<button class="chip" data-gcat="all" aria-pressed="${GC==='all'}">${T.all}</button>`+Object.entries(GCAT).map(([k,v])=>`<button class="chip" data-gcat="${k}" aria-pressed="${GC===k}">${esc(v[lg])}</button>`).join('');
+  list.sort((a,b)=>gkey(a.e,lg).localeCompare(gkey(b.e,lg),LOC[lg],{sensitivity:'base'}));
+  const groups = [];
+  if(GS==='abc'){ for(const x of list){ const L0=gkey(x.e,lg).charAt(0).toLocaleUpperCase(LOC[lg]); let g=groups[groups.length-1]; if(!g||g.h!==L0){ g={h:L0,items:[]}; groups.push(g);} g.items.push(x); } }
+  else { for(const [ck,cv] of Object.entries(GCAT)){ const items=list.filter(x=>x.e.c===ck); if(items.length) groups.push({h:cv[lg],items}); } }
   let body='';
-  for(const [ck,cv] of Object.entries(GCAT)){
-    const items=list.filter(x=>x.e.c===ck); if(!items.length) continue;
-    body+=`<h3 class="gh">${esc(cv[lg])}</h3><div class="gl">`+items.map(({e,ix})=>{
+  for(const grp of groups){
+    const items=grp.items;
+    body+=`<h3 class="gh ${GS==='abc'?'gletter':''}">${esc(grp.h)}</h3><div class="gl">`+items.map(({e,ix})=>{
       const open = GOPEN===ix || (q && list.length<=3);
       const others = ['uk','ru','en'].filter(k=>k!==lg).map(k=>`<span class="gother"><i>${k==='uk'?'укр':k==='ru'?'рус':'eng'}</i> ${esc(e.n[k])}</span>`).join('');
       const ex = (e.ex||[]).filter(k=>C[k]);
@@ -905,6 +913,7 @@ function vGloss(){
   return `<div style="display:flex;flex-direction:column;gap:12px">
     <div class="panel"><div class="toolbar"><h2>${T.title}</h2><span class="filters">${langs}</span></div><p class="note">${T.lede}</p></div>
     <input class="search" id="gq" type="search" placeholder="${esc(T.ph)}" value="${esc(GQ)}" aria-label="${esc(T.ph)}">
+    <div class="toolbar"><span class="seg"><button data-gsort="abc" aria-pressed="${GS==='abc'}">${{uk:['За абеткою','За категоріями'],ru:['По алфавиту','По категориям'],en:['A–Z','By category']}[lg][0]}</button><button data-gsort="cat" aria-pressed="${GS==='cat'}">${{uk:['За абеткою','За категоріями'],ru:['По алфавиту','По категориям'],en:['A–Z','By category']}[lg][1]}</button></span></div>
     <div class="filters">${cats}</div>
     <p class="note" id="gcount">${T.n(list.length)}</p>
     <div id="gbody" class="panel">${body||`<p class="note">${T.none}</p>`}</div>
@@ -913,6 +922,7 @@ function vGloss(){
 function glossClick(el){
   const ds=el.dataset;
   if(ds.gcat){ GC=ds.gcat; render(); return true; }
+  if(ds.gsort){ GS=ds.gsort; store.set('glossSort',GS); render(); return true; }
   if(ds.gopen!==undefined){ const i=+ds.gopen; GOPEN = GOPEN===i ? null : i; render(); return true; }
   return false;
 }
@@ -1160,7 +1170,7 @@ document.getElementById('langbtn').addEventListener('click',()=>{ S.lang = EN()?
 document.querySelector('.tabs').addEventListener('click',e=>{const t=e.target.closest('.tab[data-tab]'); if(!t) return; S.tab=t.dataset.tab; S.deck=null; S.ctx=null; S.armed=null; render();});
 view.addEventListener('click',e=>{
   const me=e.target.closest('[data-mlang],[data-mnext],[data-mreset],[data-msetupreset],[data-mn],[data-pip]'); if(me && memoClick(me)) return;
-  const ge=e.target.closest('[data-gcat],[data-gopen]'); if(ge && glossClick(ge)) return;
+  const ge=e.target.closest('[data-gcat],[data-gopen],[data-gsort]'); if(ge && glossClick(ge)) return;
   const el=e.target.closest('[data-card],[data-go],[data-back],[data-filter],[data-mode],[data-reset],[data-cf],[data-pa],[data-fav],[data-tick],[data-tabgo],[data-poolset],[data-export],[data-import],[data-newcamp],[data-cancelcamp],[data-ncinv],[data-createcamp],[data-opencamp],[data-closecamp],[data-campdeck],[data-backcamp],[data-ctr],[data-rminv],[data-addinv],[data-delcamp]');
   if(!el) return; const ds=el.dataset, l=L();
   if(ds.fav){ S.favs = isFav(ds.fav) ? S.favs.filter(x=>x!==ds.fav) : S.favs.concat(ds.fav); store.set('favs',S.favs); el.setAttribute('aria-pressed',isFav(ds.fav)); if(S.filter==='fav'&&!S.deck) render(); return; }
